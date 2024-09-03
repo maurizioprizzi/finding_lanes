@@ -12,6 +12,5 @@ canny = cv2.Canny(blur, 50, 150)
 # Os parâmetros 50 e 150 representam os thresholds (limiares) mínimo e máximo, respectivamente. 
 # Pixels com um gradiente de intensidade entre esses valores serão considerados bordas.
 
-
 cv2.imshow('result', canny)
 cv2.waitKey(0)
