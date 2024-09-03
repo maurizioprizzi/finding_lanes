@@ -1,1 +1,8 @@
+# Ignorar arquivos temporários do LibreOffice Impress
+*.~lock.*
+*.bak
+*.bak_*
+*.tmp
+*.tmp_*
+
 lanes.ipynb
