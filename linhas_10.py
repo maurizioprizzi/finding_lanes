@@ -111,36 +111,29 @@ def region_of_interest(image):
     return masked_image
     # Retorna a imagem mascarada, onde apenas a região de interesse é visível.
 
-image = cv2.imread('test_image.jpg')
-# Carrega a imagem de um arquivo ('test_image.jpg') para começar o processamento.
+# image = cv2.imread('test_image.jpg')
+# lane_image = np.copy(image)
+# canny_image = canny(lane_image)
+# cropped_image = region_of_interest(canny_image)
+# lines = cv2.HoughLinesP(cropped_image, 2, (np.pi / 180), 100, np.array([]), minLineLength=40, maxLineGap=5)
+# averaged_lines = average_slope_intercept(lane_image, lines)
+# line_image = display_lines(lane_image, averaged_lines)
+# combo_image = cv2.addWeighted(lane_image, 0.8, line_image, 1, 1)
+# cv2.imshow('result', combo_image)
+# cv2.waitKey(0)
 
-lane_image = np.copy(image)
-# Cria uma cópia da imagem original para preservar a imagem original inalterada.
+cap = cv2.VideoCapture('test2.mp4')
+while(cap.isOpened()):
+    _, frame = cap.read()
+    canny_image = canny(frame)
+    cropped_image = region_of_interest(canny_image)
+    lines = cv2.HoughLinesP(cropped_image, 2, (np.pi / 180), 100, np.array([]), minLineLength=40, maxLineGap=5)
+    averaged_lines = average_slope_intercept(frame, lines)
+    line_image = display_lines(frame, averaged_lines)
+    combo_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
+    cv2.imshow('result', combo_image)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
-canny_image = canny(lane_image)
-# Aplica a função 'canny' à imagem copiada para detectar bordas.
-
-cropped_image = region_of_interest(canny_image)
-# Aplica a função 'region_of_interest' à imagem de bordas para isolar a área da estrada.
-
-lines = cv2.HoughLinesP(cropped_image, 2, (np.pi / 180), 100, np.array([]), minLineLength=40, maxLineGap=5)
-# Aplica a Transformada de Hough probabilística para detectar linhas na imagem de bordas.
-# O primeiro parâmetro é a imagem processada, o segundo é a resolução do acumulador da Transformada de Hough (em pixels), e o terceiro é a resolução angular (em radianos).
-# O quarto parâmetro é o threshold que define o número mínimo de interseções para detectar uma linha.
-# 'minLineLength' é o comprimento mínimo que uma linha precisa ter para ser considerada, e 'maxLineGap' é a distância máxima entre segmentos de linha para que sejam considerados uma única linha.
-
-averaged_lines = average_slope_intercept(lane_image, lines)
-# Calcula as médias das inclinações e interceptações das linhas detectadas à esquerda e à direita, gerando linhas representativas para cada lado da pista.
-
-line_image = display_lines(lane_image, averaged_lines)
-# Cria uma imagem com as linhas médias desenhadas sobre um fundo preto.
-
-combo_image = cv2.addWeighted(lane_image, 0.8, line_image, 1, 1)
-# Combina a imagem original com as linhas desenhadas usando uma ponderação (80% da imagem original e 100% das linhas).
-# Isso sobrepõe as linhas detectadas na imagem original, permitindo ver tanto as faixas da estrada quanto a imagem real.
-
-cv2.imshow('result', combo_image)
-# Exibe a imagem final combinada, mostrando a estrada com as linhas das faixas destacadas.
-
-cv2.waitKey(0)
-# Mantém a janela de exibição aberta até que uma tecla seja pressionada.
+cap.release()
+cv2.destroyAllWindows()
