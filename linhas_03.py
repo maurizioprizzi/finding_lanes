@@ -1,14 +1,25 @@
 import cv2
 import numpy as np
 
+# Lê a imagem do arquivo
 image = cv2.imread('test_image.jpg')
+
+# Cria uma cópia da imagem original para preservar os dados da imagem original
 lane_image = np.copy(image)
 
+# Converte a imagem copiada para escala de cinza
 gray = cv2.cvtColor(lane_image, cv2.COLOR_RGB2GRAY)
-blur = cv2.GaussianBlur(gray, (5,5), 0)
-# Aplica um filtro Gaussiano à imagem em escala de cinza usando a função cv2.GaussianBlur().
-# O filtro Gaussiano suaviza a imagem, reduzindo o ruído e os detalhes finos. Isso é feito ao calcular uma média ponderada dos pixels em torno de cada pixel, utilizando uma matriz 5x5 (o primeiro argumento).
-# O terceiro argumento é o desvio padrão da distribuição Gaussiana. Um valor de 0 faz com que o OpenCV o calcule automaticamente com base no tamanho do kernel.
 
+# Aplica um desfoque gaussiano na imagem em escala de cinza
+# O desfoque é usado para suavizar a imagem, reduzindo o ruído e facilitando o processamento de bordas
+# (5, 5) é o tamanho do kernel de desfoque, e 0 é o desvio padrão da distribuição
+blur = cv2.GaussianBlur(gray, (5, 5), 0)
+
+# Exibe a imagem borrada em uma janela chamada 'result'
 cv2.imshow('result', blur)
+
+# Aguarda até que qualquer tecla seja pressionada para continuar
 cv2.waitKey(0)
+
+# Fecha todas as janelas abertas criadas por OpenCV
+cv2.destroyAllWindows()
